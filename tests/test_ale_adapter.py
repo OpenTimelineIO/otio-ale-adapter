@@ -164,13 +164,16 @@ class ALEAdapterTest(unittest.TestCase):
     def test_ale_uhd(self):
         ale_path = EXAMPLEUHD_PATH
         collection = otio.adapters.read_from_file(ale_path)
-        frmt = str(collection.metadata.get("ALE").get("header").get("VIDEO_FORMAT"))
+        frmt = str(
+            collection.metadata.get("ALE").get("header").get("VIDEO_FORMAT")
+        )
         self.assertEqual(frmt, "CUSTOM")
 
     def test_ale_add_format(self):
 
         # adds a clip to the supplied timeline, sets the clips "Image Size"
-        # metadata and then rountrips the ALE verifying the supplied format is detected
+        # metadata and then rountrips the ALE verifying the supplied format
+        # is detected
         def add_then_check(timeline, size, expected_format):
             cl = otio.schema.Clip(
                 metadata={'ALE': {'Image Size': size}},

@@ -183,7 +183,10 @@ def _video_format_from_metadata(clips):
 
 
 def read_from_string(input_str, fps=24, **adapter_argument_map):
-    ale_name_column_key = adapter_argument_map.get('ale_name_column_key', 'Name')
+    ale_name_column_key = adapter_argument_map.get(
+        'ale_name_column_key',
+        'Name'
+    )
 
     collection = otio.schema.SerializableCollection()
     header = {}
@@ -234,10 +237,12 @@ def read_from_string(input_str, fps=24, **adapter_argument_map):
                 if line.strip() == "":
                     continue
 
-                clip = _parse_data_line(line,
-                                        columns,
-                                        fps,
-                                        ale_name_column_key=ale_name_column_key)
+                clip = _parse_data_line(
+                    line,
+                    columns,
+                    fps,
+                    ale_name_column_key=ale_name_column_key
+                )
 
                 collection.append(clip)
 
