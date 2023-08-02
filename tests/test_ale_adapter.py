@@ -13,6 +13,9 @@ SAMPLE_DATA_DIR = os.path.join(os.path.dirname(__file__), "sample_data")
 EXAMPLE_PATH = os.path.join(SAMPLE_DATA_DIR, "sample.ale")
 EXAMPLE2_PATH = os.path.join(SAMPLE_DATA_DIR, "sample2.ale")
 EXAMPLE_CDL_PATH = os.path.join(SAMPLE_DATA_DIR, "sample_cdl.ale")
+EXAMPLE_NO_SECTION_NEWLINE_PATH = os.path.join(
+    SAMPLE_DATA_DIR, "sample_no_blank_lines_between_sections.ale"
+)
 EXAMPLEUHD_PATH = os.path.join(SAMPLE_DATA_DIR, "sampleUHD.ale")
 
 
@@ -170,6 +173,18 @@ class ALEAdapterTest(unittest.TestCase):
             collection.metadata .get("ALE") .get("header") .get("VIDEO_FORMAT")
         )
         self.assertEqual(frmt, "CUSTOM")
+
+    def test_ale_no_newline_between_sections(self):
+        ale_path = EXAMPLE_NO_SECTION_NEWLINE_PATH
+        collection = otio.adapters.read_from_file(ale_path)
+        assert len(collection) == 6
+
+        # Spot-check one of the clips
+        clip = collection[4]
+        ale_metadata = clip.metadata["ALE"]
+
+        assert ale_metadata["Tape"] == "A_0076C005_230511_190706_h1CTJ"
+        assert ale_metadata["Take"] == "5"
 
     def test_ale_add_format(self):
 
