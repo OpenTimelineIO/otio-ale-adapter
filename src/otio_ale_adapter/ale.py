@@ -284,8 +284,7 @@ def read_from_string(input_str, fps=24, **adapter_argument_map):
             clip_generator = _read_data(
                 lines, columns, fps, ale_name_column_key
             )
-            for clip in clip_generator:
-                collection.append(clip)
+            collection.extend(clip_generator)
 
     collection.metadata["ALE"] = {
         "header": header,
