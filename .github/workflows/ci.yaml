@@ -38,9 +38,9 @@ jobs:
 
       - name: Check LongPathsEnabled
         run: |
-          if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
+          if ( "${{ matrix.os }}" == "windows-latest" ) {
             (Get-ItemProperty "HKLM:System\CurrentControlSet\Control\FileSystem").LongPathsEnabled
-          fi
+          }
         shell: pwsh
 
       - name: Install dependencies
