@@ -1,6 +1,9 @@
 # OpenTimelineIO ALE Adapter
-![Supported Versions](https://img.shields.io/badge/OpenTimelineIO->=0.17.0-blue)
 [![Build Status](https://github.com/OpenTimelineIO/otio-ale-adapter/actions/workflows/ci.yaml/badge.svg)](https://github.com/OpenTimelineIO/otio-ale-adapter/actions/workflows/ci.yaml)
+[![PyPI pyversions](https://img.shields.io/pypi/pyversions/otio-ale-adapter.svg)](https://pypi.python.org/pypi/otio-ale-adapter/)
+![Dynamic TOML Badge](https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2FOpenTimelineIO%2Fotio-ale-adapter%2Fmain%2Fpyproject.toml&query=%24.project.dependencies%5B0%5D&label=dependencies)
+
+
 
 The `ale` adapter is part of OpenTimelineIO's contrib adapter plugins.
 
