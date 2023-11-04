@@ -3,9 +3,6 @@
 ![Dynamic YAML Badge](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2FOpenTimelineIO%2Fotio-ale-adapter%2Fmain%2F.github%2Fworkflows%2Fci.yaml&query=%24.jobs%5B%22test-plugin%22%5D.strategy.matrix%5B%22python-version%22%5D&label=Python)
 ![Dynamic YAML Badge](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2FOpenTimelineIO%2Fotio-ale-adapter%2Fmain%2F.github%2Fworkflows%2Fci.yaml&query=%24.jobs%5B%22test-plugin%22%5D.strategy.matrix%5B%22otio-version%22%5D&label=OpenTimelineIO)
 
-
-
-
 The `ale` adapter is part of OpenTimelineIO's contrib adapter plugins.
 
 
@@ -46,7 +43,9 @@ any other contributor’s trade names, trademarks, service marks, or product nam
 # Contributions
 
 If you want to contribute to the project,
-please see: https://opentimelineio.readthedocs.io/en/latest/tutorials/contributing.html
+please see: https://opentimelineio.readthedocs.io/en/latest/tutorials/contributing.html  
+Please also read up on [testing your code](https://github.com/OpenTimelineIO/otio-plugin-template#testing-your-plugin-during-development) 
+in the "getting started" section of the OpenTimelineIO plugin template repository.
 
 # Contact
 
