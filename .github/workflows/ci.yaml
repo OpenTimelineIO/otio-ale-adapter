@@ -36,20 +36,15 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Check LongPathsEnabled
-        if: ${{ matrix.os }} == "windows-latest"
-        run: |
-            (Get-ItemProperty "HKLM:System\CurrentControlSet\Control\FileSystem").LongPathsEnabled
-        shell: pwsh
-
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           if [[ "${{ matrix.otio-version }}" == "main" ]]; then
             pip install "git+https://github.com/AcademySoftwareFoundation/OpenTimelineIO.git"
           else
-            pip install -V OpenTimelineIO>=${{ matrix.otio-version }}
+            pip install -vv OpenTimelineIO>=${{ matrix.otio-version }} --pre --only-binary :all:
           fi
+          pip freeze
           pip install flake8 pytest pytest-cov
         shell: bash
 
