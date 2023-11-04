@@ -41,6 +41,7 @@ jobs:
           if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
             (Get-ItemProperty "HKLM:System\CurrentControlSet\Control\FileSystem").LongPathsEnabled
           fi
+        shell: bash
 
       - name: Install dependencies
         run: |
