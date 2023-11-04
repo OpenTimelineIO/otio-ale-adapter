@@ -39,7 +39,7 @@ jobs:
       - name: Check LongPathsEnabled
         run: |
           if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
-            (Get-ItemProperty "HKLM:System\CurrentControlSet\Control\FileSystem").LongPathsEnabled
+            \(Get-ItemProperty "HKLM:System\\CurrentControlSet\\Control\\FileSystem"\).LongPathsEnabled
           fi
         shell: bash
 
