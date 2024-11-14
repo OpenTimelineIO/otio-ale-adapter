@@ -221,7 +221,8 @@ def read_from_string(input_str, fps=24, **adapter_argument_map):
                     raise ALEParseError("Invalid Heading line: " + line)
 
         if "FPS" in header:
-            fps = float(header["FPS"])
+            read_fps = float(header["FPS"])
+            fps = otio.opentime.RationalTime.nearest_smpte_timecode_rate(read_fps)
 
         if line.strip() == "Column":
             if len(lines) == 0:
