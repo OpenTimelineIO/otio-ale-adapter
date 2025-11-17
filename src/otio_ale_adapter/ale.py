@@ -206,19 +206,22 @@ def read_from_string(input_str, fps=24, **adapter_argument_map):
         if line.strip() == "Heading":
             while len(lines):
                 line = nextline(lines)
+                
+                # skip blank lines
+                if line.strip() != "":
 
-                if line.strip() == "":
-                    break
+                    if line.strip() == "Column":
+                        break
 
-                if "\t" not in line:
-                    raise ALEParseError("Invalid Heading line: " + line)
+                    if "\t" not in line:
+                        raise ALEParseError("Invalid Heading line: " + line)
 
-                segments = line.split("\t")
-                while len(segments) >= 2:
-                    key, val = segments.pop(0), segments.pop(0)
-                    header[key] = val
-                if len(segments) != 0:
-                    raise ALEParseError("Invalid Heading line: " + line)
+                    segments = line.split("\t")
+                    while len(segments) >= 2:
+                        key, val = segments.pop(0), segments.pop(0)
+                        header[key] = val
+                    if len(segments) != 0:
+                        raise ALEParseError("Invalid Heading line: " + line)
 
         if "FPS" in header:
             fps = float(header["FPS"])
@@ -227,8 +230,11 @@ def read_from_string(input_str, fps=24, **adapter_argument_map):
             if len(lines) == 0:
                 raise ALEParseError("Unexpected end of file after: " + line)
 
-            line = nextline(lines)
-            columns = line.split("\t")
+            line = ""
+            # skip blank lines
+            while line == "":
+                line = nextline(lines)
+                columns = line.split("\t")
 
         if line.strip() == "Data":
             while len(lines):
