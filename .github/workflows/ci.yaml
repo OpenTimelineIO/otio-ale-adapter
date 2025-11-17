@@ -22,7 +22,7 @@ jobs:
         # When OTIO has an Apple Silicon build we can switch back to macos-latest for that version
         os: [ubuntu-latest, windows-latest, macos-14, macos-latest]
         python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
-        otio-version: ["0.17.0,<0.18.0", "0.18.1,<0.19.0", "main"]
+        otio-version: ["0.17.0", "0.18.1", "main"]
 
     runs-on: ${{ matrix.os }}
 
@@ -40,7 +40,7 @@ jobs:
           if [[ "${{ matrix.otio-version }}" == "main" ]]; then
             pip install "git+https://github.com/AcademySoftwareFoundation/OpenTimelineIO.git"
           else
-            pip install OpenTimelineIO>="${{ matrix.otio-version }}" --only-binary :all:
+            pip install OpenTimelineIO=="${{ matrix.otio-version }}" --only-binary :all:
           fi
           pip install flake8 pytest pytest-cov
         shell: bash
