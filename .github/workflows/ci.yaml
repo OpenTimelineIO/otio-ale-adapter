@@ -22,10 +22,7 @@ jobs:
         # When OTIO has an Apple Silicon build we can switch back to macos-latest for that version
         os: [ubuntu-latest, windows-latest, macos-14, macos-latest]
         python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
-        otio-version: ["0.17.0", "0.18.1", "main"]
-        exclude:
-         - otio-version: "0.17.0"
-           python-version: "3.13"
+        otio-version: ["0.18.1", "main"]
 
     runs-on: ${{ matrix.os }}
 
