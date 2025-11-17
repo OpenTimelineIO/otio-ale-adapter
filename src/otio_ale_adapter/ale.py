@@ -223,6 +223,8 @@ def read_from_string(input_str, fps=24, **adapter_argument_map):
         if "FPS" in header:
             read_fps = float(header["FPS"])
             fps = otio.opentime.RationalTime.nearest_smpte_timecode_rate(read_fps)
+            if abs(read_fps - fps) > 1.0:
+                raise ALEParseError("Unsupported FPS: " + header["FPS"])
 
         if line.strip() == "Column":
             if len(lines) == 0:
