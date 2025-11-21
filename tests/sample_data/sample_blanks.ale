@@ -1,0 +1,22 @@
+Heading
+
+FIELD_DELIM	TABS
+
+VIDEO_FORMAT	1080
+
+AUDIO_FORMAT	48khz
+
+FPS	25
+
+
+
+Column
+
+Name	Tracks	Start	End	Take	Tape	UNC	FPS	Reel	Scene	Shoot date	Manufacturer	Source Resolution	Source Bit Depth	DESCRIPT	Comments	Audio SR	Audio Bit Depth	Auxiliary TC1	KN Start	Source File Path	Filter	Camera ID	ISO	Lens Number	Camera Serial #	Camera Type	White Point (Kelvin)	Angle	Camera	Clip Number	Stereoscopic Eye	Gamma Space	LUT 1	ASC_SOP	ASC_SAT	RESOLVE_SIZING	
+
+
+
+Data
+
+A020C003_150905_E2XZ.mov	V	05:42:12:20	05:42:30:12		A020E2XZ	Y:\Pennrand_CompWorkflow_XXXXXX\04_Compositing\11_Render_Compositing\PennComp_Za250\PennComp_Za250_Raw\A020C003_150905_E2XZ.mov	25	A020E2XZ		20150905	DaVinci Resolve	2048x1152	16							Y:\Pennrand_CompWorkflow_XXXXXX\04_Compositing\11_Render_Compositing\PennComp_Za250\PennComp_Za250_Raw\A020C003_150905_E2XZ.mov	0	E2XZ	800	0	3120	Alexa Plus	4700	1800	A	A020C003_150905_E2XZ	SINGLE	LOG-C	None	(1.1822 1.2183 1.2284)(-0.2429 -0.2823 -0.2849)(0.7283 0.7096 0.7054)	1.0680	(0.0000 0.0000 1.0000 0.0000 0.0000 0 0)	
+

@@ -13,11 +13,9 @@ SAMPLE_DATA_DIR = os.path.join(os.path.dirname(__file__), "sample_data")
 EXAMPLE_PATH = os.path.join(SAMPLE_DATA_DIR, "sample.ale")
 EXAMPLE2_PATH = os.path.join(SAMPLE_DATA_DIR, "sample2.ale")
 EXAMPLE_CDL_PATH = os.path.join(SAMPLE_DATA_DIR, "sample_cdl.ale")
-EXAMPLE_NO_SECTION_NEWLINE_PATH = os.path.join(
-    SAMPLE_DATA_DIR, "sample_no_blank_lines_between_sections.ale"
-)
 EXAMPLEUHD_PATH = os.path.join(SAMPLE_DATA_DIR, "sampleUHD.ale")
-
+EXAMPLE_BLANK_PATH = os.path.join(SAMPLE_DATA_DIR, "sample_blanks.ale")
+EXAMPLE_NO_BLANKS = os.path.join(SAMPLE_DATA_DIR, "sample_no_blanks.ale")
 
 class ALEAdapterTest(unittest.TestCase):
 
@@ -174,9 +172,41 @@ class ALEAdapterTest(unittest.TestCase):
         )
         self.assertEqual(frmt, "CUSTOM")
 
-    def test_ale_no_newline_between_sections(self):
-        ale_path = EXAMPLE_NO_SECTION_NEWLINE_PATH
+    def test_ale_read_blank_lines(self):
+        ale_path = EXAMPLE_BLANK_PATH
         collection = otio.adapters.read_from_file(ale_path)
+        self.assertTrue(collection is not None)
+        self.assertEqual(type(collection), otio.schema.SerializableCollection)
+        self.assertEqual(len(collection), 1)
+        # The ALE header information is the original FPS stored in the file,
+        # and not the nearest SMPTE timecode rate
+        fps = float(collection.metadata.get("ALE").get("header").get("FPS"))
+        self.assertEqual(fps, 25)
+        self.assertEqual([c.name for c in collection], [
+            "A020C003_150905_E2XZ.mov"
+        ])
+        self.assertEqual(collection[0].source_range, otio.opentime.TimeRange(
+                otio.opentime.from_timecode("05:42:12:20", fps),
+                otio.opentime.from_timecode("00:00:17:17", fps)
+        ))
+
+        # Slope, offset, and power values are of type _otio.AnyVector
+        # So we have to convert them to lists otherwise
+        # the comparison between those two types would fail
+
+        self.assertEqual(
+            list(collection[0].metadata['cdl']['asc_sop']['slope']),
+            [1.1822, 1.2183, 1.2284])
+        self.assertEqual(
+            list(collection[0].metadata['cdl']['asc_sop']['offset']),
+            [-0.2429, -0.2823, -0.2849])
+        self.assertEqual(
+            list(collection[0].metadata['cdl']['asc_sop']['power']),
+            [0.7283, 0.7096, 0.7054])
+        self.assertEqual(collection[0].metadata['cdl']['asc_sat'], 1.0680)
+
+    def test_ale_no_newline_between_sections(self):
+        collection = otio.adapters.read_from_file(EXAMPLE_NO_BLANKS)
         assert len(collection) == 6
 
         # Spot-check one of the clips

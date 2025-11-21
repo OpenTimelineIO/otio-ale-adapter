@@ -214,7 +214,13 @@ def _read_columns(lines):
     Consumes the Column information from the ALE and returns the list of
     columns.
     """
-    line = lines.pop(0)
+    try:
+        line = lines.pop(0)
+        while not line.strip():
+            line = lines.pop(0)
+    except IndexError:
+        raise ALEParseError("Unexpected end of file after 'Column'")
+
     columns = line.split("\t")
 
     return columns
