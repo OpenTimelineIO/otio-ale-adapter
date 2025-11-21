@@ -186,9 +186,6 @@ def read_from_string(input_str, fps=24, **adapter_argument_map):
     ale_name_column_key = adapter_argument_map.get(
         "ale_name_column_key", "Name"
     )
-    snap_to_smpte_rate = adapter_argument_map.get(
-        "snap_to_smpte_rate", True
-    )
 
     collection = otio.schema.SerializableCollection()
     header = {}
@@ -224,17 +221,14 @@ def read_from_string(input_str, fps=24, **adapter_argument_map):
 
         if "FPS" in header:
             read_fps = float(header["FPS"])
-            if not snap_to_smpte_rate:
-                fps = read_fps
-            else:
-                fps = otio.opentime.RationalTime.nearest_smpte_timecode_rate(
-                    read_fps
+            fps = otio.opentime.RationalTime.nearest_smpte_timecode_rate(
+                read_fps
+            )
+            if abs(read_fps - fps) > 1.0:
+                raise ALEParseError(
+                    "FPS is not a supported SMPTE timecode frame rate: "
+                    + header["FPS"]
                 )
-                if abs(read_fps - fps) > 1.0:
-                    raise ALEParseError(
-                        "FPS is not a supported SMPTE timecode frame rate: "
-                        + header["FPS"]
-                    )
 
         if line.strip() == "Column":
             if len(lines) == 0:
