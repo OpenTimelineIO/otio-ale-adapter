@@ -17,6 +17,7 @@ EXAMPLEUHD_PATH = os.path.join(SAMPLE_DATA_DIR, "sampleUHD.ale")
 EXAMPLE_BLANK_PATH = os.path.join(SAMPLE_DATA_DIR, "sample_blanks.ale")
 EXAMPLE_NO_BLANKS = os.path.join(SAMPLE_DATA_DIR, "sample_no_blanks.ale")
 
+
 class ALEAdapterTest(unittest.TestCase):
 
     def test_ale_read(self):
