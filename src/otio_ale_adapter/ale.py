@@ -9,6 +9,7 @@ import opentimelineio as otio
 
 DEFAULT_VIDEO_FORMAT = '1080'
 ASC_SOP_REGEX = re.compile(r'(-*\d+\.\d+)')
+ALE_SECTION_DESIGNATORS = {"Heading", "Column", "Data"}
 
 
 def AVID_VIDEO_FORMAT_FROM_WIDTH_HEIGHT(width, height):
@@ -182,6 +183,70 @@ def _video_format_from_metadata(clips):
         return AVID_VIDEO_FORMAT_FROM_WIDTH_HEIGHT(max_width, max_height)
 
 
+def _read_heading_lines(lines):
+    """
+    Consumes all the Header information from lines returning a dictionary
+    mapping header keys to header values.
+    """
+    header = {}
+    # read until we run out of lines or the next section starts, not consuming
+    # the next section designator
+    while len(lines) and lines[0] not in ALE_SECTION_DESIGNATORS:
+        line = lines.pop(0)
+        if line.strip() == "":
+            continue
+
+        if "\t" not in line:
+            raise ALEParseError("Invalid Heading line: " + line)
+
+        segments = line.split("\t")
+        while len(segments) >= 2:
+            key, val = segments.pop(0), segments.pop(0)
+            header[key] = val
+        if len(segments) != 0:
+            raise ALEParseError("Invalid Heading line: " + line)
+
+    return header
+
+
+def _pop_columns(lines):
+    """
+    Consumes the Column information from the ALE and returns the list of
+    columns.
+    """
+    try:
+        line = lines.pop(0)
+        # skip blank lines
+        while not line.strip():
+            line = lines.pop(0)
+    except IndexError:
+        raise ALEParseError("Unexpected end of file after 'Column'")
+
+    columns = line.split("\t")
+
+    return columns
+
+
+def _read_data(lines, columns, fps, ale_name_column_key):
+    """
+    Generator consuming the Data section of the ALE yielding Clips.
+    """
+    while len(lines):
+        line = lines.pop(0)
+
+        if line.strip() == "":
+            continue
+
+        clip = _parse_data_line(
+            line,
+            columns,
+            fps,
+            ale_name_column_key=ale_name_column_key
+        )
+
+        yield clip
+
+
 def read_from_string(input_str, fps=24, **adapter_argument_map):
     ale_name_column_key = adapter_argument_map.get(
         "ale_name_column_key", "Name"
@@ -203,21 +268,7 @@ def read_from_string(input_str, fps=24, **adapter_argument_map):
             continue
 
         if line.strip() == "Heading":
-            while len(lines):
-                line = nextline(lines)
-
-                if line.strip() == "":
-                    break
-
-                if "\t" not in line:
-                    raise ALEParseError("Invalid Heading line: " + line)
-
-                segments = line.split("\t")
-                while len(segments) >= 2:
-                    key, val = segments.pop(0), segments.pop(0)
-                    header[key] = val
-                if len(segments) != 0:
-                    raise ALEParseError("Invalid Heading line: " + line)
+            header.update(_read_heading_lines(lines))
 
         if "FPS" in header:
             read_fps = float(header["FPS"])
@@ -234,24 +285,13 @@ def read_from_string(input_str, fps=24, **adapter_argument_map):
             if len(lines) == 0:
                 raise ALEParseError("Unexpected end of file after: " + line)
 
-            line = nextline(lines)
-            columns = line.split("\t")
+            columns = _pop_columns(lines)
 
         if line.strip() == "Data":
-            while len(lines):
-                line = nextline(lines)
-
-                if line.strip() == "":
-                    continue
-
-                clip = _parse_data_line(
-                    line,
-                    columns,
-                    fps,
-                    ale_name_column_key=ale_name_column_key
-                )
-
-                collection.append(clip)
+            clip_generator = _read_data(
+                lines, columns, fps, ale_name_column_key
+            )
+            collection.extend(clip_generator)
 
     collection.metadata["ALE"] = {
         "header": header,
