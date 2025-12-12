@@ -209,13 +209,14 @@ def _read_heading_lines(lines):
     return header
 
 
-def _read_columns(lines):
+def _pop_columns(lines):
     """
     Consumes the Column information from the ALE and returns the list of
     columns.
     """
     try:
         line = lines.pop(0)
+        # skip blank lines
         while not line.strip():
             line = lines.pop(0)
     except IndexError:
@@ -284,7 +285,7 @@ def read_from_string(input_str, fps=24, **adapter_argument_map):
             if len(lines) == 0:
                 raise ALEParseError("Unexpected end of file after: " + line)
 
-            columns = _read_columns(lines)
+            columns = _pop_columns(lines)
 
         if line.strip() == "Data":
             clip_generator = _read_data(
